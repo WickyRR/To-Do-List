@@ -1,0 +1,61 @@
+<%- include('partials/header.ejs'); -%>
+<div class="blockm">
+ <div class="container col-3">
+    <h1 class="border border-4 mt-4 text-center p-3" >
+        To Do List
+    </h1>
+
+    <div class="card text-center">
+        <div class="card-header">
+            <form action="/addDate" method="post" class="flex flex-row">
+                <input type="date" name="date" class="form-control mb-2">
+                <button  class="edit btn btn-primary mb-5" type="submit" >ADD date</button>
+            </form>
+          <ul class="nav nav-tabs card-header-tabs mb-3">
+            <form action="/day" method="post">
+              <% for(let title of titleLIst){%>
+              <li class="nav-item">
+                <label class="nav-link active" ><%=title.day %></label>
+                <input type="submit" name ="day_id" value="<%=title.id %>">
+              </li>
+              <% }%>
+            </form>
+          </ul>
+        </div>
+        <div class="card-body container inline">
+          <% for(let item of listItems) {%>
+            <div class="d-flex justify-content-between mb-2">
+            <form action="/delete" method="post" class="">
+                <input type="checkbox" onchange="this.form.submit()" name="deleteItemId" value="<%=item.id%>">
+            </form>
+            <div id="title<%=item.id%>" class=""><%= item.task %></div>
+            <form action="/edit" method="post">
+                <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+                <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.task %>" class="form-control-plaintext" autocomplete="off"
+                  autofocus="true" hidden="true" />
+                <button id="done<%=item.id%>" class="edit btn btn-secondary" type="submit" hidden>Submit</button>
+            </form>
+            <button id="edit<%=item.id%>" class="edit btn btn-danger" onclick="handler('<%=item.id%>')">
+               Edit
+            </button>
+            
+            </div>
+            <hr>
+            <%}%>
+            <form class="item" action="/add" method="post">
+                <input type="text" name="newItem" placeholder="New Item" class="form-control-plaintext" autocomplete="off" autofocus="true" />
+                <button class="add btn btn-primary px-5" type="submit" name="list" value="" >ADD</button>
+            </form>
+        </div>
+      </div>
+      
+ </div>   
+ <script>
+    function handler(id) {
+      document.getElementById("title" + id).setAttribute("hidden", true)
+      document.getElementById("edit" + id).setAttribute("hidden", true)
+      document.getElementById("done" + id).removeAttribute("hidden")
+      document.getElementById("input" + id).removeAttribute("hidden")
+    }
+  </script>
+
