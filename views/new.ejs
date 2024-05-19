@@ -1,0 +1,94 @@
+<%- include('partials/header.ejs'); -%>
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-xl-10">
+          <h1 class="border border-5 text-center" >
+            To Do List
+          </h1>
+    
+          <div class="card">
+            <div class="card-body p-5">
+              <form class="d-flex justify-content-center align-items-center mb-4" action="/addDate" method="post">
+                <div data-mdb-input-init class="form-outline flex-fill">
+                  <input type="date" id="form2" name="date" placeholder="New Item" autocomplete="off" autofocus="true" class="form-control" />
+                </div>
+                <button type="submit"  class="btn btn-light ms-2" name="list" value="">Add Date</button>
+              </form>  
+              <form class="d-flex justify-content-center align-items-center mb-4" action="/add" method="post">
+                <div data-mdb-input-init class="form-outline flex-fill">
+                  <input type="text" id="form2" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" class="form-control" />
+                  
+                </div>
+                <button type="submit"  class="btn btn-info ms-2 " name="list" value="">Add Task</button>
+              </form>
+              
+              <!-- Tabs navs -->
+              <form action="/day" method="post">
+              <ul class="nav nav-tabs mb-4 pb-2" id="ex1" role="tablist">
+                <% for(let title of titleLIst){ %>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="date<%=title.id%>" onclick="handler('<%=title.id %>')"  
+                     aria-selected="true" type="submit" name ="day_id" value="<%=title.id %>"><%=title.day %></button>
+                </li>
+                <% }%>
+              </ul>
+            </form>
+              <!-- Tabs navs -->
+  
+              <!-- Tabs content -->
+              <div class="tab-content" id="ex1-content">
+                <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel"
+                  aria-labelledby="ex1-tab-1">
+                  <ul class="list-group mb-0">
+                    <% for(let item of listItems) { %>
+                    <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
+                      style="background-color: #f4f6f7;" id="title<%=item.id%>">
+                      <form action="/delete" method="post" class="">
+                        <input type="checkbox" class="form-check-input me-2" onchange="this.form.submit()" name="deleteItemId" value="<%=item.id%>">
+                    </form>
+                      <%=item.task%>
+                    </li>
+                    <form action="/edit" method="post">
+                      <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+                      <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.task %>" class="form-control-plaintext" autocomplete="off"
+                        autofocus="true" hidden="true" />
+                      <button id="done<%=item.id%>"  type="submit"class="edit btn btn-success" hidden><img class="icon"
+                        src="/assets/check-solid.svg" alt="tick image"></button>
+                    </form>
+                    <button id="edit<%=item.id%>" class="edit btn btn-warning" onclick="handler('<%=item.id%>')">
+                      <img class="icon"
+                      src="/assets/pencil-solid.svg" alt="pencil image"></button>
+                    <%}%>
+                  </ul>
+                </div>
+                
+              </div>
+              <!-- Tabs content -->
+  
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function handler(id) {
+      document.getElementById("title" + id).setAttribute("hidden", true)
+      document.getElementById("edit" + id).setAttribute("hidden", true)
+      document.getElementById("done" + id).removeAttribute("hidden")
+      document.getElementById("input" + id).removeAttribute("hidden")
+
+      if(currentday===id){
+        document.getElementById("date" + id).setAttribute("active", true);
+        console.log(currentday);
+      }else{
+        document.getElementById("date" + id).removeAttribute("active");
+      }
+    }
+  </script>
+
+<%- include('partials/footer.ejs'); -%>
